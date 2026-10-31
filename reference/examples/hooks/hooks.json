@@ -1,0 +1,60 @@
+﻿{
+  "SessionStart": [
+    {
+      "matcher": "startup|resume",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "if [ -d conductor ] && [ -f conductor/tracks.md ]; then completed=$(grep -c '\\[x\\]' conductor/tracks.md 2>/dev/null || echo 0); in_progress=$(grep -c '\\[~\\]' conductor/tracks.md 2>/dev/null || echo 0); pending=$(grep -c '\\[ \\]' conductor/tracks.md 2>/dev/null || echo 0); echo \"{\\\"systemMessage\\\": \\\"Conductor: $completed complete, $in_progress in-progress, $pending pending tracks\\\"}\"; fi",
+          "timeout": 5
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "Write|Edit",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r '.tool_input.file_path // empty' 2>/dev/null | { read fp; if [ -n \"$fp\" ] && echo \"$fp\" | grep -q 'conductor/tracks/.*/plan.md'; then track_id=$(echo \"$fp\" | sed 's|.*/conductor/tracks/\\([^/]*\\)/.*|\\1|'); echo \"Plan updated for track: $track_id\"; fi; }",
+          "timeout": 5
+        }
+      ]
+    },
+    {
+      "matcher": "Bash",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r '.tool_input.command // empty' 2>/dev/null | { read cmd; if echo \"$cmd\" | grep -q 'git commit'; then echo 'Git commit detected'; fi; }",
+          "timeout": 5
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "if [ -f conductor/tracks.md ]; then in_progress=$(grep -c '\\[~\\]' conductor/tracks.md 2>/dev/null || echo 0); if [ \"$in_progress\" -gt 0 ]; then echo \"{\\\"systemMessage\\\": \\\"Reminder: $in_progress track(s) in progress. Run /conductor-okf:status for details.\\\"}\"; fi; fi",
+          "timeout": 5
+        }
+      ]
+    }
+  ],
+  "PreToolUse": [
+    {
+      "matcher": "Write|Edit",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r '.tool_input.file_path // empty' 2>/dev/null | { read fp; if [ -n \"$fp\" ]; then if echo \"$fp\" | grep -qE 'conductor/(product|tech-stack|workflow)\\.md$'; then echo \"{\\\"systemMessage\\\": \\\"Modifying core conductor config: $fp\\\"}\"; fi; fi; }",
+          "timeout": 5
+        }
+      ]
+    }
+  ]
+}

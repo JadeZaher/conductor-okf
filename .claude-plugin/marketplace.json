@@ -1,0 +1,32 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "conductor-okf",
+  "description": "Single-plugin marketplace for conductor-okf.",
+  "owner": {
+    "name": "JadeZaher"
+  },
+  "plugins": [
+    {
+      "name": "conductor-okf",
+      "description": "Independent context-driven spec/plan/TDD track workflow with the runbook layer built in: OKF frontmatter on every context and track file, prebaked file partitions on tracks, and the handoff/slice skills that own conductor/RUNBOOK.md (session handoff, rolling review-verdict checkpoints, parallel fan-out planning).",
+      "version": "1.3.0",
+      "author": {
+        "name": "JadeZaher"
+      },
+      "source": "./",
+      "category": "workflow",
+      "tags": [
+        "conductor",
+        "okf",
+        "open-knowledge-format",
+        "tracks",
+        "tdd",
+        "planning",
+        "runbook",
+        "handoff",
+        "slice",
+        "orchestration"
+      ]
+    }
+  ]
+}

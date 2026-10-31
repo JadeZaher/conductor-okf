@@ -1,0 +1,8 @@
+{
+  "name": "conductor-okf",
+  "version": "1.3.0",
+  "description": "Independent context-driven spec/plan/TDD track workflow with the runbook layer built in. Originally derived from claude-conductor 1.2.0, now detached and self-maintained: the Open Knowledge Format (OKF) convention is baked into every context and track file, tracks carry prebaked file partitions for agent parallelization, and the handoff/slice skills own conductor/RUNBOOK.md end to end — session handoff, rolling checkpoints with recorded review verdicts, and conflict-free parallel fan-out planning. Upstream is no longer tracked or merged.",
+  "author": {
+    "name": "JadeZaher"
+  }
+}
